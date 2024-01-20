@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            background-color: #b3ecf1;
+        }
+
+
+        #noButton {
+            position: absolute;
+            margin-left: 150px;
+            transition: 0.5s;
+        }
+
+        #yesButton {
+            position: absolute;
+            margin-right: 150px;
+        }
+
+        .header_text {
+            font-family: 'Nunito';
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .btn {
+            background-color: #83dfe9;
+            color: white;
+            padding: 30px 60px;
+            text-align: center;
+            display: inline-block;
+            font-size: 24px;
+            margin: 10px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        #yesButton {
+            transition: transform 0.5s ease;
+        }
+
+        .gif_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            width: 75vmin;
+            height: auto;
+        }
+
+        @media only screen and (max-width: 320px) and (max-height: 568px) {
+            body {
+                height: 100vh;
+            }
+
+            .header_text {
+                font-size: 20px;
+            }
+
+            img {
+                height: 60vh;
+            }
+
+            .btn {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) and (max-height: 736px) {
+            body {
+                height: 90vh;
+            }
+
+            .header_text {
+                font-size: 38px;
+            }
+
+            img {
+                height: 60vh;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1 class="header_text">Do you wanna go out with me?</h1>
+        </div>
+        <div class="gif_container">
+            <img src="images/1.gif">
+        </div>
+        <div class="buttons">
+            <button class="btn" id="yesButton" onclick="nextPage()">Yes</button>
+            <button class="btn" id="noButton" onmouseover="moveButton(event)">No</button>
+        </div>
+    </div>
+    <script>
+        if ('ontouchstart' in window) {
+          // This is a mobile device
+          // Load mobile-specific script
+          function nextPage() {
+                        window.location.href = "yes.html";
+                    }
+                    
+                    function moveButton() {
+    var x = Math.random() * (window.innerWidth - document.getElementById('noButton').offsetWidth) - 85;
+    var y = Math.random() * (window.innerHeight - document.getElementById('noButton').offsetHeight) - 48;
+    document.getElementById('noButton').style.left = x + 'px';
+    document.getElementById('noButton').style.top = y + 'px';
+
+    // Lines 136 and 137: Update the position of the "No" button
+    var noButton = document.getElementById('noButton');
+    noButton.style.transition = 'transform 0.5s ease';
+}
+
+
+        }
+          else {
+          // This is a PC or a device with a mouse pointer
+          // Load PC-specific script
+          
+        function nextPage() {
+            window.location.href = "yes.html";
+        }
+
+        function moveButton(event) {
+            var yesButton = document.getElementById('yesButton');
+            var noButton = document.getElementById('noButton');
+
+            // Get the current position of the pointer
+            var pointerX = event.clientX;
+            var pointerY = event.clientY;
+
+            // Calculate the new position for the Yes button
+            var x = pointerX - yesButton.offsetWidth / 2;
+            var y = pointerY - yesButton.offsetHeight / 2;
+
+            // Set the position of the Yes button
+            yesButton.style.left = Math.max(0, Math.min(window.innerWidth - yesButton.offsetWidth, x)) + 'px';
+            yesButton.style.top = Math.max(0, Math.min(window.innerHeight - yesButton.offsetHeight, y)) + 'px';
+
+            // Move the No button away (similar to the original behavior)
+            var newX = Math.random() * (window.innerWidth - noButton.offsetWidth) - 85;
+            var newY = Math.random() * (window.innerHeight - noButton.offsetHeight) - 48;
+            noButton.style.left = Math.max(0, Math.min(window.innerWidth - noButton.offsetWidth, newX)) + 'px';
+            noButton.style.top = Math.max(0, Math.min(window.innerHeight - noButton.offsetHeight, newY)) + 'px';
+        }}
+    </script>
+</body>
+</html>

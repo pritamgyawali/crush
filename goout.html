@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            background-color: #b3ecf1;
+        }
+
+
+        #noButton {
+            position: absolute;
+            margin-left: 150px;
+            transition: 0.5s;
+        }
+
+        #yesButton {
+            position: absolute;
+            margin-right: 150px;
+        }
+
+        .header_text {
+            font-family: 'Nunito';
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .btn {
+            background-color: #83dfe9;
+            color: white;
+            padding: 30px 60px;
+            text-align: center;
+            display: inline-block;
+            font-size: 24px;
+            margin: 10px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        #yesButton {
+            transition: transform 0.5s ease, padding 0.5s ease, font-size 0.5s ease;
+        }
+
+        .gif_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            width: 75vmin;
+            height: auto;
+        }
+
+        @media only screen and (max-width: 320px) and (max-height: 568px) {
+            body {
+                height: 100vh;
+            }
+
+            .header_text {
+                font-size: 20px;
+            }
+
+            img {
+                height: 60vh;
+            }
+
+            .btn {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) and (max-height: 736px) {
+            body {
+                height: 90vh;
+            }
+
+            .header_text {
+                font-size: 38px;
+            }
+
+            img {
+                height: 60vh;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1 class="header_text">Do you wanna go out with me?</h1>
+        </div>
+        <div class="gif_container">
+            <img src="images/1.gif">
+        </div>
+        <div class="buttons">
+            <button class="btn" id="yesButton" onclick="nextPage()">Yes</button>
+            <button class="btn" id="noButton" onmouseover="moveButton(event)" onclick="handleNoClick()">No</button>
+        </div>
+    </div>
+    <script>
+        if ('ontouchstart' in window) {
+          // This is a mobile device - Touch logic
+          let clickCount = 0;
+          const noButtonTexts = ["No", "please 🥺", "you're breaking my heart 🤧", "I'll ask again 🥲", "preety please 🥺"];
+          
+          function nextPage() {
+              window.location.href = "yes.html";
+          }
+          
+          function handleNoClick() {
+              const noButton = document.getElementById('noButton');
+              const yesButton = document.getElementById('yesButton');
+              const yesButtonRect = yesButton.getBoundingClientRect();
+              
+              // Increment click count
+              clickCount++;
+              
+              // Change No button text
+              if (clickCount < noButtonTexts.length) {
+                  noButton.textContent = noButtonTexts[clickCount];
+              }
+              
+              // Calculate Yes button size to fill screen at click 5
+              // Arithmetic progression: each click adds constant amount
+              // At click 5, button should be 100vw x 100vh
+              
+              if (clickCount >= 5) {
+                  // Fill entire screen
+                  yesButton.style.position = 'fixed';
+                  yesButton.style.top = '0';
+                  yesButton.style.left = '0';
+                  yesButton.style.width = '100vw';
+                  yesButton.style.height = '100vh';
+                  yesButton.style.margin = '0';
+                  yesButton.style.padding = '0';
+                  yesButton.style.display = 'flex';
+                  yesButton.style.justifyContent = 'center';
+                  yesButton.style.alignItems = 'center';
+                  yesButton.style.fontSize = '48px';
+                  yesButton.style.zIndex = 1000;
+                  noButton.style.display = 'none';
+              } else {
+                  // Arithmetic progression for clicks 1-4
+                  // Calculate target dimensions (100vw x 100vh at click 5)
+                  const targetWidth = window.innerWidth;
+                  const targetHeight = window.innerHeight;
+                  
+                  // Get original button dimensions
+                  const originalPaddingV = 30;
+                  const originalPaddingH = 60;
+                  const originalFontSize = 24;
+                  const buttonText = yesButton.textContent;
+                  
+                  // Calculate approximate original width and height
+                  const originalWidth = originalPaddingH * 2 + (buttonText.length * originalFontSize * 0.6);
+                  const originalHeight = originalPaddingV * 2 + originalFontSize * 1.2;
+                  
+                  // Arithmetic progression: add constant amount each click
+                  const widthIncrement = (targetWidth - originalWidth) / 5;
+                  const heightIncrement = (targetHeight - originalHeight) / 5;
+                  
+                  const newWidth = originalWidth + (widthIncrement * clickCount);
+                  const newHeight = originalHeight + (heightIncrement * clickCount);
+                  
+                  // Calculate aspect ratio from original dimensions
+                  const aspectRatio = originalWidth / originalHeight;
+                  
+                  // Apply size while maintaining aspect ratio
+                  // Use the dimension that grows proportionally
+                  let finalWidth, finalHeight;
+                  if (newWidth / newHeight > aspectRatio) {
+                      finalHeight = newHeight;
+                      finalWidth = finalHeight * aspectRatio;
+                  } else {
+                      finalWidth = newWidth;
+                      finalHeight = finalWidth / aspectRatio;
+                  }
+                  
+                  // Convert to padding (maintain original text size ratio)
+                  const paddingH = finalWidth / (originalWidth / originalPaddingH);
+                  const paddingV = finalHeight / (originalHeight / originalPaddingV);
+                  const fontSize = originalFontSize * (finalWidth / originalWidth);
+                  
+                  yesButton.style.padding = `${paddingV}px ${paddingH}px`;
+                  yesButton.style.fontSize = `${fontSize}px`;
+                  yesButton.style.zIndex = 1000;
+                  yesButton.style.position = 'fixed';
+                  
+                  // Move No button to random position avoiding Yes button
+                  moveNoButtonAway(yesButton);
+              }
+          }
+          
+          function moveNoButtonAway(yesButton) {
+              const noButton = document.getElementById('noButton');
+              const yesRect = yesButton.getBoundingClientRect();
+              
+              let newX, newY;
+              let attempts = 0;
+              const maxAttempts = 50;
+              
+              // Try to find a position that doesn't overlap with Yes button
+              do {
+                  newX = Math.random() * (window.innerWidth - noButton.offsetWidth);
+                  newY = Math.random() * (window.innerHeight - noButton.offsetHeight);
+                  attempts++;
+                  
+                  // Check if new position overlaps with Yes button
+                  const wouldOverlap = !(
+                      newX > yesRect.right ||
+                      newX + noButton.offsetWidth < yesRect.left ||
+                      newY > yesRect.bottom ||
+                      newY + noButton.offsetHeight < yesRect.top
+                  );
+                  
+                  if (!wouldOverlap || attempts >= maxAttempts) {
+                      break;
+                  }
+              } while (true);
+              
+              noButton.style.left = newX + 'px';
+              noButton.style.top = newY + 'px';
+          }
+        }
+        else {
+          // This is a PC or a device with a mouse pointer - Hover logic
+          
+          function nextPage() {
+              window.location.href = "yes.html";
+          }
+
+          function moveButton(event) {
+              var yesButton = document.getElementById('yesButton');
+              var noButton = document.getElementById('noButton');
+
+              // Get the current position of the pointer
+              var pointerX = event.clientX;
+              var pointerY = event.clientY;
+
+              // Calculate the new position for the Yes button
+              var x = pointerX - yesButton.offsetWidth / 2;
+              var y = pointerY - yesButton.offsetHeight / 2;
+
+              // Set the position of the Yes button
+              yesButton.style.left = Math.max(0, Math.min(window.innerWidth - yesButton.offsetWidth, x)) + 'px';
+              yesButton.style.top = Math.max(0, Math.min(window.innerHeight - yesButton.offsetHeight, y)) + 'px';
+
+              // Move the No button away (similar to the original behavior)
+              var newX = Math.random() * (window.innerWidth - noButton.offsetWidth) - 85;
+              var newY = Math.random() * (window.innerHeight - noButton.offsetHeight) - 48;
+              noButton.style.left = Math.max(0, Math.min(window.innerWidth - noButton.offsetWidth, newX)) + 'px';
+              noButton.style.top = Math.max(0, Math.min(window.innerHeight - noButton.offsetHeight, newY)) + 'px';
+          }
+          
+          // Dummy function for PC (no click logic needed)
+          function handleNoClick() {
+              // No action on PC
+          }
+        }
+    </script>
+</body>
+</html>
